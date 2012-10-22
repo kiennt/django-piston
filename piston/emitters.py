@@ -102,7 +102,7 @@ class Emitter(object):
             ret = None
 
             # return anything we've already seen as a string only
-            # this prevents infinite recursion in the case of recursive 
+            # this prevents infinite recursion in the case of recursive
             # relationships
 
             if thing in self.stack:
@@ -175,10 +175,10 @@ class Emitter(object):
                 # use the list_fields from the base handler and accept that
                 # the nested models won't appear properly
                 # Refs #157
-                if handler:
-                    fields = getattr(handler, 'fields')    
-                
-                if not fields or hasattr(handler, 'fields'):
+                if not fields and handler:
+                    fields = getattr(handler, 'fields')
+
+                if not fields and hasattr(handler, 'fields'):
                     """
                     Fields was not specified, try to find teh correct
                     version in the typemapper we were sent.
@@ -193,7 +193,7 @@ class Emitter(object):
                     if not get_fields:
                         get_fields = set([ f.attname.replace("_id", "", 1)
                             for f in data._meta.fields + data._meta.virtual_fields])
-                    
+
                     if hasattr(mapped, 'extra_fields'):
                         get_fields.update(mapped.extra_fields)
 
